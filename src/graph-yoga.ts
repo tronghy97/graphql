@@ -10,10 +10,19 @@ class GraphYoga {
             hello(name: String): String!
             product(id: Int): City
             products: [City]
+            persons: [Person]
+            person_name(name: String): Person
+            persons_gender(gender: String): [Person]
         }
         type City {
             id: Int!
             name: String!,
+        }
+
+        type Person{
+            name: String!
+            age: Int!
+            gender: String!
         }
         `
     ]
@@ -26,6 +35,15 @@ class GraphYoga {
             },
             products: () => {
                 return db.default.cities
+            },
+            persons: () =>{
+                return db.default.persons
+            },
+            person_name: (_, { name }) => {
+                return db.default.persons.find(e => {return e.name == name})
+            },
+            persons_gender:(_, { gender }) => {
+                return db.default.persons.filter(e => {return e.gender == gender})
             }
         }
     }
